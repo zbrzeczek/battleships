@@ -2,8 +2,7 @@
 //  main.cpp
 //  statki
 //
-//  Created by Zuzanna Brzęczek on 18/11/2021.
-//
+
 
 #include <iostream>
 #include <vector>
