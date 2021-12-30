@@ -6,7 +6,8 @@
 
 #include <iostream>
 #include <stdlib.h>
-#include <vector>
+#include <windows.h>
+#include <stdlib.h>
 using namespace std;
 
 
@@ -25,8 +26,7 @@ char tablica_shots[2][10][10] = {
     {{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '},{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '},{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '},{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '},{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '},{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '},{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '},{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '},{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '},{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '}}
 };
 
-int statkiGracza[4];
-char player[10][10], player2[10][10];
+int statkiGracza[4] = {0, 0, 0, 0};
 
 void change_ships(int nrStatku, int iloscStatku, int statkiGracza[4], int* suma){
     int x = statkiGracza[nrStatku-1];
@@ -90,27 +90,34 @@ void choose_ships(int statkiGracza[4]){
     int nrStatku, iloscStatku;
     bool powtorzenie = true;
     int decyzja;
-    cout << endl << "-------------------------------" << endl;
+    /*cout << "-------------------------------" << endl;
     cout << "Choose the amount of ships" << endl;
-    cout << "-------------------------------" << endl << endl;
+    cout << "-------------------------------" << endl << endl;*/
     int ilosc, suma = 0, sum;
     for (int nrStatku = 4; nrStatku > 0; nrStatku--){
+        cout << "-------------------------------" << endl;
+        cout << "Choose the amount of ships" << endl;
+        cout << "-------------------------------" << endl << endl;
         cout << "Choose " << nrStatku << "-square ships" << endl;
         cin >> ilosc;
         int zmienna = nrStatku + nrStatku +2;
         sum = ilosc * zmienna;
         suma = suma + sum;
         if (suma > 100){
-            cout << "Too much ships " << nrStatku << endl;
+            cout << "Too much ships " << endl << "Try again!!" << endl;
             nrStatku++;
             suma = suma - sum;
+            Sleep(2000);
         }
         else statkiGracza[nrStatku-1] = ilosc;
+        cout << endl;
+        system("CLS");
     }
     cout << endl;
+    system("CLS");
     
     while (powtorzenie == true) {
-        cout << "Current amount of ships:"<< endl;
+        cout << "Current amount of ships:"<< endl << endl;
         cout << "-------------------------" << endl;
         for (int z = 0; z<4; z++){
             cout << z+1 << "-square ships: " << statkiGracza[z] << endl;
@@ -121,14 +128,17 @@ void choose_ships(int statkiGracza[4]){
         cin >> decyzja;
         cout << endl;
         if (decyzja == 1) {
+            system("CLS");
             cout << "Which ships do you want to change?" << endl;
             cin >> nrStatku;
             cout << "Type the amount of ship:" << endl;
             cin >> iloscStatku;
             cout << endl;
+            system("CLS");
             change_ships(nrStatku, iloscStatku, statkiGracza, &suma);
         }
         else powtorzenie = false;
+        system("CLS");
     }
 }
 
@@ -145,7 +155,7 @@ void display_ships(int gracz){
         cout << "* " << endl;
     }
     cout << "   * * * * * * * * * * * *"<< endl << endl;
-    cout << "----------------------------" << endl;
+    cout << "----------------------------";
 }
 
 void display_ingame(int gracz){
@@ -172,7 +182,7 @@ void display_ingame(int gracz){
     }
     
     cout << "   * * * * * * * * * * * *              "<<"   * * * * * * * * * * * * " << endl;
-    cout << "-------------------------------------------------------" << endl;
+    cout << "-------------------------------------------------------------------------" << endl;
 }
 
 void place_ships(int iloscGraczy, string names[2]){
@@ -192,15 +202,15 @@ void place_ships(int iloscGraczy, string names[2]){
         
         suma = statkiGracza[0] + statkiGracza[1] +statkiGracza[2] + statkiGracza[3];
         display_ships(gracz);
-        cout << endl << endl << endl;
+        cout << endl;
         for(int y =0; y<suma;y++){
             cout << "Ships left"<< endl;
-            cout << "-----------------" <<endl;
+            cout << "---------------------------" << endl;
             for (int i =0;i<4;i++){
                     cout << "Ship " << i+1 <<": " << zmiennaTablica[i] << endl;
                 }
             cout << endl;
-            cout << "If chosen ship has more than 1 square, it'll be placed either vertically or horizontally from chosen square";
+            cout << "If ship has more than 1 square, it'll be placed either vertically (downwards) or horizontally (to the right) from chosen square";
             cout << endl;
             cout << "Which ship do you want to place?" << endl;
             cin >> wyborDlugosci;
@@ -242,8 +252,10 @@ void place_ships(int iloscGraczy, string names[2]){
             }
             display_ships(gracz);
         }
-        cout << "You placed all your ships!!" << endl;
+        cout << endl << "You placed all your ships!!" << endl;
         cout << "---------------------------" << endl << endl;
+        Sleep(3000);
+        system("CLS");
     }
 }
 
@@ -255,8 +267,9 @@ int pvp(){
     
     cout << "Name of player 1:" << endl;
     cin >> names[0];
-    cout << "Name of player 1:" << endl;
+    cout << "Name of player 2:" << endl;
     cin >> names[1];
+    system("CLS");
     /*int suma;
     choose_ships(statkiGracza);
     int zmiennaTablica[4];
@@ -330,14 +343,30 @@ int pvp(){
     
     turn = rand() % 2;
     
-    /*if (turn == 1){
+    if (turn == 1){
         display_ingame(2);
+        cout << "Player " << names[1] << "Make your shot" << endl;
+        cout << "Choose column: ";
+        cin >> y;
+        cout << "Choose Row: ";
+        cin >> x;   
+        if (tablica[0][x-1][y-1] == 'X') {
+            cout << "Hit!!" << endl;
+            tablica_shots[1][x-1][y-1] = '#';
+        }
+        else {
+            cout << "Miss :((" << endl;
+            tablica_shots[1][x-1][y-1] = '-';
+        }
         turn = 0;
-    }*/
-    //while(game == true){
+        display_ingame(2);
+        Sleep(3000);
+        system("CLS");
+    }
+    while(game == true){
         if (turn == 0){
             display_ingame(1);
-            cout << "Make your shot" << endl;
+            cout << "Player " << names[0] << "Make your shot" << endl;
             cout << "Choose column: ";
             cin >> y;
             cout << "Choose Row: ";
@@ -352,10 +381,13 @@ int pvp(){
                 tablica_shots[0][x-1][y-1] = '-';
             }
             turn = 1;
+            display_ingame(1);
+            Sleep(3000);
+            system("CLS");
         }
         else if (turn == 1){
             display_ingame(2);
-            cout << "Make your shot" << endl;
+            cout << "Player " << names[1] << "Make your shot" << endl;
             cout << "Choose column: ";
             cin >> y;
             cout << "Choose Row: ";
@@ -370,15 +402,18 @@ int pvp(){
                 tablica_shots[1][x-1][y-1] = '-';
             }
             turn = 0;
+            display_ingame(2);
+            Sleep(3000);
+            system("CLS");
         }
-    //}
+    }
     
     
-    //display how many ships are available
+    /*display how many ships are available
     
-    //in dispaly do ABCD not 1234
+    in dispaly do ABCD not 1234
 
-    /*
+    
      
      make shot
      
@@ -396,22 +431,33 @@ int pvp(){
 
 
 int pve(){
-    
+    string names[1];
+    cout << "Name of player:" << endl;
+    cin >> names[0];
+    system("CLS");
+    place_ships(1, names);
     return 0;
 }
 
-
 int main() {
     int tryb;
-    cout << "Choose gamemode:" << endl;
-    cout << "Player vs. Player  <- 1"<< endl << "Player vs. Computer  <- 2"<< endl;
-    cin >> tryb;
-    
-    if (tryb == 1) pvp();
-    else pve();
-    
-    
-    
-    cout << endl;
+    bool game = true;
+    string odp;
+    while (game == true){
+        cout << "Choose gamemode:" << endl;
+        cout << "Player vs. Player  <- 1"<< endl << "Player vs. Computer  <- 2"<< endl;
+        cin >> tryb;
+        system("CLS");
+        if (tryb == 1) pvp();
+        else pve();
+        system("CLS");
+        cout << "Do you want to play again? (yes or no)" << endl;
+        cin >> odp;
+        if (odp == "no") game = false;
+        else {
+            
+        }
+        system("CLS");
+    }
     return 0;
 }
