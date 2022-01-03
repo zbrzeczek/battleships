@@ -6,7 +6,7 @@
 
 #include <iostream>
 #include <stdlib.h>
-#include <windows.h>
+//#include <windows.h>
 #include <stdlib.h>
 using namespace std;
 
@@ -107,7 +107,7 @@ void choose_ships(int statkiGracza[4]){
             cout << "Too much ships " << endl << "Try again!!" << endl;
             nrStatku++;
             suma = suma - sum;
-            Sleep(2000);
+            //Sleep(2000);
         }
         else statkiGracza[nrStatku-1] = ilosc;
         cout << endl;
@@ -254,14 +254,16 @@ void place_ships(int iloscGraczy, string names[2]){
         }
         cout << "You placed all your ships!!" << endl;
         cout << "---------------------------" << endl << endl;
-        Sleep(3000);
+        //Sleep(3000);
         system("CLS");
     }
 }
 
 void check_ship(int x, int y, int gracz){
     int zmienna;
-    int size;
+    int size = 0;
+    bool hitandshot = true;
+    char way = ' ';
     if (gracz == 1) zmienna = 0;
     else zmienna = 1;
     if (tablica[zmienna][x-1][y-1] == 'X') {
@@ -274,8 +276,39 @@ void check_ship(int x, int y, int gracz){
         else {
             cout << "Hit and Sunk!!" << endl;
         }
-
-
+        for (int i = 1; i <4; i++){
+            if (way == 'V'){
+                if (tablica[zmienna][x-1-i][y-1] == 'X' && tablica_shots[zmienna][x-1-i][y-1] == ' '){
+                    hitandshot = false;
+                }
+                else if (tablica[zmienna][x-1-i][y-1] == 'X' && tablica_shots[zmienna][x-1-i][y-1] == '#'){
+                    size++;
+                }
+                else if (tablica[zmienna][x-1+i][y-1] == 'X' && tablica_shots[zmienna][x-1-i][y-1] == ' '){
+                    hitandshot = false;
+                }
+                else if (tablica[zmienna][x-1+i][y-1] == 'X' && tablica_shots[zmienna][x-1-i][y-1] == '#'){
+                    size++;
+                }
+            }
+            else if (way == 'H'){
+                if (tablica[zmienna][x-1][y-1-i] == 'X' && tablica_shots[zmienna][x-1-i][y-1] == ' '){
+                    hitandshot = false;
+                }
+                else if (tablica[zmienna][x-1][y-1-i] == 'X' && tablica_shots[zmienna][x-1-i][y-1] == '#'){
+                    size++;
+                }
+                else if (tablica[zmienna][x-1][y-1+i] == 'X' && tablica_shots[zmienna][x-1-i][y-1] == ' '){
+                    hitandshot = false;
+                }
+                else if (tablica[zmienna][x-1][y-1+i] == 'X' && tablica_shots[zmienna][x-1-i][y-1] == '#'){
+                    size++;
+                }
+            }
+        }
+        if (hitandshot == true){
+            cout << "You shot " << size << "-squared ship!" << endl;
+        }
     }
     else {
         cout << "Miss :((" << endl;
@@ -384,7 +417,7 @@ int pvp(){
         }
         turn = 0;
         display_ingame(2);
-        Sleep(3000);
+        //Sleep(3000);
         system("CLS");
     }
     while(game == true){
@@ -406,7 +439,7 @@ int pvp(){
             }
             turn = 1;
             display_ingame(1);
-            Sleep(3000);
+            //Sleep(3000);
             system("CLS");
         }
         else if (turn == 1){
@@ -427,7 +460,7 @@ int pvp(){
             }
             turn = 0;
             display_ingame(2);
-            Sleep(3000);
+            //Sleep(3000);
             system("CLS");
         }
     
@@ -445,9 +478,8 @@ int pvp(){
      
      */
     
+    }
     return 0;
-    
-}
 }
 
 int pve(){ 
@@ -476,7 +508,7 @@ int pve(){
             tablica_shots[0][x-1][y-1] = '-';
         }
         display_ingame(1);
-        Sleep(3000);
+        //Sleep(3000);
         system("CLS");
     }
     return 0;
