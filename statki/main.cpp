@@ -155,7 +155,7 @@ void display_ships(int gracz){
         cout << "* " << endl;
     }
     cout << "   * * * * * * * * * * * *"<< endl << endl;
-    cout << "----------------------------";
+    cout << "----------------------------" << endl;
 }
 
 void display_ingame(int gracz){
@@ -225,7 +225,7 @@ void place_ships(int iloscGraczy, string names[2]){
                 cin >> stronaOs;
             }
             else stronaOs="single";
-            
+            cout << endl;
             if (around_check(wyborDlugosci, polex, poley, stronaOs, gracz) == true){
                 around(wyborDlugosci, stronaOs, polex, poley,gracz);
                 if (stronaOs == "horizontally"){
@@ -252,10 +252,34 @@ void place_ships(int iloscGraczy, string names[2]){
             }
             display_ships(gracz);
         }
-        cout << endl << "You placed all your ships!!" << endl;
+        cout << "You placed all your ships!!" << endl;
         cout << "---------------------------" << endl << endl;
         Sleep(3000);
         system("CLS");
+    }
+}
+
+void check_ship(int x, int y, int gracz){
+    int zmienna;
+    int size;
+    if (gracz == 1) zmienna = 0;
+    else zmienna = 1;
+    if (tablica[zmienna][x-1][y-1] == 'X') {
+        tablica_shots[gracz][x-1][y-1] = '#';
+        //pamietaj ze od strzalu statek moze byc w 2 kierunki 
+        if (tablica[zmienna][x-2][y-1] == 'X') way = 'V';
+        else if (tablica[zmienna][x][y-1] == 'X') way = 'V';
+        else if (tablica[zmienna][x-1][y-2] == 'X') way = 'H';
+        else if (tablica[zmienna][x-1][y] == 'X') way = 'H';
+        else {
+            cout << "Hit and Sunk!!" << endl;
+        }
+
+
+    }
+    else {
+        cout << "Miss :((" << endl;
+        tablica_shots[gracz][x-1][y-1] = '-';
     }
 }
 
@@ -345,7 +369,7 @@ int pvp(){
     
     if (turn == 1){
         display_ingame(2);
-        cout << "Player " << names[1] << "Make your shot" << endl;
+        cout << "Player " << names[1] << " make your shot" << endl;
         cout << "Choose column: ";
         cin >> y;
         cout << "Choose Row: ";
@@ -406,14 +430,10 @@ int pvp(){
             Sleep(3000);
             system("CLS");
         }
-    }
-    
     
     /*display how many ships are available
     
     in dispaly do ABCD not 1234
-
-    
      
      make shot
      
@@ -428,14 +448,37 @@ int pvp(){
     return 0;
     
 }
+}
 
-
-int pve(){
+int pve(){ 
+    int y, x;
     string names[1];
+    bool game = true;
+
     cout << "Name of player:" << endl;
     cin >> names[0];
     system("CLS");
     place_ships(1, names);
+    while (game == true){
+        display_ingame(1);
+        cout << "Player " << names[0] << "Make your shot" << endl;
+        cout << "Choose column: ";
+        cin >> y;
+        cout << "Choose Row: ";
+        cin >> x;
+            
+        if (tablica[1][x-1][y-1] == 'X') {
+            cout << "Hit!!" << endl;
+            tablica_shots[0][x-1][y-1] = '#';
+        }
+        else {
+            cout << "Miss :((" << endl;
+            tablica_shots[0][x-1][y-1] = '-';
+        }
+        display_ingame(1);
+        Sleep(3000);
+        system("CLS");
+    }
     return 0;
 }
 
@@ -455,7 +498,15 @@ int main() {
         cin >> odp;
         if (odp == "no") game = false;
         else {
-            
+            for (int z = 0;z<2;z++){
+                for (int x = 0;x < 10;x++){
+                    for (int y = 0;y<10;y++){
+                        tablica[z][x][y] = ' ';
+                        tablica_shots[z][x][y] = ' ';
+                        tablica_sprawdzajaca[z][x+1][y+1] = 0;
+                    }
+                }
+            }
         }
         system("CLS");
     }
