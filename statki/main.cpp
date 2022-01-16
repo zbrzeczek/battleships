@@ -6,7 +6,7 @@
 
 #include <iostream>
 #include <stdlib.h>
-#include <windows.h>
+//#include <windows.h>
 #include <time.h>
 using namespace std;
 
@@ -29,7 +29,11 @@ char columns[10] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
 int statkiGracza[4] = {0, 0, 0, 0};
 int shots[2] = {0, 0};
 char way[2] = {' ',' '};
-
+char z = ' ';
+int xMain, yMain;
+int sides[4] = {0, 0, 0, 0};
+int sidesMain = 0;
+ 
 void change_ships(int nrStatku, int iloscStatku, int statkiGracza[4], int* suma){
     int x = statkiGracza[nrStatku-1];
     *suma = *suma - (x*2) - 2;
@@ -106,14 +110,14 @@ void choose_ships(int statkiGracza[4]){
             cout << "Too much ships " << endl << "Try again!!" << endl;
             nrStatku++;
             suma = suma - sum;
-            Sleep(2000);
+            //Sleep(2000);
         }
         else statkiGracza[nrStatku-1] = ilosc;
         cout << endl;
-        system("CLS");
+        //system("CLS");
     }
     cout << endl;
-    system("CLS");
+    //system("CLS");
     
     while (powtorzenie == true) {
         cout << "Current amount of ships:"<< endl << endl;
@@ -127,13 +131,13 @@ void choose_ships(int statkiGracza[4]){
         cin >> decyzja;
         cout << endl;
         if (decyzja == 1) {
-            system("CLS");
+            //system("CLS");
             cout << "Which ships do you want to change?" << endl;
             cin >> nrStatku;
             cout << "Type the amount of ship:" << endl;
             cin >> iloscStatku;
             cout << endl;
-            system("CLS");
+            //system("CLS");
             change_ships(nrStatku, iloscStatku, statkiGracza, &suma);
         }
         else powtorzenie = false;
@@ -213,8 +217,8 @@ void place_ships(int iloscGraczy, string names[2]){
                 cout << "You have no " << wyborDlugosci <<"-squared ships left!" << endl;
                 cout << "Try again" << endl;
                 y--;
-                Sleep(2000);
-                system("CLS");
+                //Sleep(2000);
+                //system("CLS");
             }
             else {
                 cout << "Choose square" << endl;
@@ -263,8 +267,8 @@ void place_ships(int iloscGraczy, string names[2]){
         }
         cout << "You placed all your ships!!" << endl;
         cout << "---------------------------" << endl << endl;
-        Sleep(3000);
-        system("CLS");
+        //Sleep(3000);
+        //system("CLS");
     }
 }
 
@@ -336,11 +340,11 @@ void place_comp() {
     }
         cout << "You placed all your ships!!" << endl;
         cout << "---------------------------" << endl << endl;
-        Sleep(3000);
-        system("CLS");
+        //Sleep(3000);
+        //system("CLS");
 }
 
-void check_ship(int x, int y, int gracz, int shotships, int *hit){
+void shot_ship(int x, int y, int gracz, int shotships, int *hit){
     int zmienna;
     int size = 0;
     int zmiennaSize = 0;
@@ -400,7 +404,7 @@ void check_ship(int x, int y, int gracz, int shotships, int *hit){
             cout << "Hit and Sunk!!" << endl;
             cout << "You shot " << size+1 << "-squared ship!" << endl;
             shots[gracz]++;
-            *hit = 1;
+            *hit = 2;
         }
         else cout << "Hit! "<<endl;
         *hit = 1;
@@ -408,34 +412,88 @@ void check_ship(int x, int y, int gracz, int shotships, int *hit){
     else {
         cout << "Miss :((" << endl;
         tablica_shots[gracz][x-1][y-1] = '-';
+        *hit = 0;
     }
 }
 
-void random_shots(char *z, int *tries){
-    int x, y;
-    int hit[2] =  {0, 0};
-    cout << "Choose column: ";
-    y = rand() % 10+1;
-    cout << "Choose Row: ";
-    x = rand() % 10+1;
-
-    if (*z == ' '){
-        if (*tries == 0) {
-            check_ship(x-2, y-1, 1, shots[1], &hit[1]) 
-            if (hit[1] == 1) *z = 'V';
+void random_shots(int *hit, int *hitComp){
+    int zmienna;
+    int hitt = *hit;
+    *hit = hitt;
+    
+    if (*hitComp == 1) {
+        zmienna = rand() % 4;
+        switch (zmienna) {
+            case 0:
+                if (sides[zmienna] == 0){
+                    yMain--;
+                    shot_ship(xMain, yMain, 1, shots[1], &hitt);
+                    if (hitt == 2) {
+                        *hitComp = 0;
+                    }
+                    else if (hitt == 1){
+                        sidesMain = zmienna;
+                    }
+                    else if (hitt == 0){
+                        *hitComp = 0;
+                    }
+                }
+                break;
+            case 1:
+                if (sides[zmienna] == 0){
+                    yMain++;
+                    shot_ship(xMain, yMain, 1, shots[1], &hitt);
+                    if (hitt == 2) {
+                        *hitComp = 0;
+                    }
+                    else if (hitt == 1){
+                        sidesMain = zmienna;
+                    }
+                    else if (hitt == 0){
+                        *hitComp = 0;
+                    }
+                }
+                break;
+            case 2:
+                if (sides[zmienna] == 0){
+                    xMain--;
+                    shot_ship(xMain, yMain, 1, shots[1], &hitt);
+                    if (hitt == 2) {
+                        *hitComp = 0;
+                    }
+                    else if (hitt == 1){
+                        sidesMain = zmienna;
+                    }
+                    else if (hitt == 0){
+                        *hitComp = 0;
+                    }
+                }
+                break;
+            case 3:
+                if (sides[zmienna] == 0){
+                    xMain++;
+                    shot_ship(xMain, yMain, 1, shots[1], &hitt);
+                    if (hitt == 2) {
+                        *hitComp = 0;
+                    }
+                    else if (hitt == 1){
+                        sidesMain = zmienna;
+                    }
+                    else if (hitt == 0){
+                        *hitComp = 0;
+                    }
+                }
+                break;
         }
-        else if (tablica[1][x][y-1] == 'X') *z = 'V';
-        else if (tablica[1][x-1][y-2] == 'X') *z = 'H';
-        else if (tablica[1][x-1][y] == 'X') *z = 'H';
     }
-    else if (*z == 'V') {
-        
+    else {
+        cout << "Choose column: ";
+        yMain = rand() % 10+1;
+        cout << "Choose Row: ";
+        xMain = rand() % 10+1;
+        shot_ship(xMain, yMain, 1, shots[1], &hitt);
+        if (hitt == 1) *hitComp = 1;
     }
-    else if (*z == 'H'){
-
-    }
-    check_ship(x, y, 1, shots[1], &hit[2]);
-
 }
 
 int pvp(){
@@ -450,7 +508,7 @@ int pvp(){
     cin >> names[0];
     cout << "Name of player 2:" << endl;
     cin >> names[1];
-    system("CLS");
+    //system("CLS");
     place_ships(2, names);
     suma = statkiGracza[0] + statkiGracza[1] +statkiGracza[2] + statkiGracza[3];
     turn = rand() % 2;
@@ -465,15 +523,15 @@ int pvp(){
             }
         cout << "Choose Row: ";
         cin >> x;   
-        check_ship(x, y, 1, shots[1], &hit[1]);
-        if (hit[1] == 1) turn = 0;
+        shot_ship(x, y, 1, shots[1], &hit[1]);
+        if (hit[1] == 0) turn = 0;
         display_ingame(2);
         if (shots[1] == suma) {
             cout << "Congratulations! Player "<< names[1] << " won!" <<endl;
             game = false;
         }
-        Sleep(3000);
-        system("CLS");
+        //Sleep(3000);
+        //system("CLS");
     }
     while(game == true){
         if (turn == 0){
@@ -488,15 +546,15 @@ int pvp(){
             cout << "Choose Row: ";
             cin >> x;
             
-            check_ship(x, y, 0, shots[0], &hit[0]);
+            shot_ship(x, y, 0, shots[0], &hit[0]);
             display_ingame(1);
             if (shots[0] == suma) {
                 cout << "Congratulations! Player "<< names[0] << " won!" <<endl;
                 game = false;
             } 
-            if (hit[0] == 1) turn = 1;
-            Sleep(3000);
-            system("CLS");
+            if (hit[0] == 0) turn = 1;
+            //Sleep(3000);
+            //system("CLS");
         }
         else if (turn == 1){
             display_ingame(2);
@@ -509,15 +567,15 @@ int pvp(){
             cout << "Choose Row: ";
             cin >> x;
             
-            check_ship(x, y, 1, shots[1], &hit[1]);
+            shot_ship(x, y, 1, shots[1], &hit[1]);
             display_ingame(2);
             if (shots[1] == suma) {
                 cout << "Congratulations! Player "<< names[1] << " won!" <<endl;
                 game = false;
             }
-            if (hit[1] == 1) turn = 0;
-            Sleep(3000);
-            system("CLS");
+            if (hit[1] == 0) turn = 0;
+            //Sleep(3000);
+            //system("CLS");
         }
     
     /*
@@ -530,11 +588,10 @@ int pvp(){
     return 0;
 }
 
-int pve(){ 
+int pve(){
     int y, x, suma;
-    char z = ' ';
-    int tries = 0;
     int hit[2] =  {0, 0};
+    int hitComp = 0;
     char yc;
     int turn = 0;
     string names[1];
@@ -542,7 +599,7 @@ int pve(){
 
     cout << "Name of player:" << endl;
     cin >> names[0];
-    system("CLS");
+    //system("CLS");
     place_ships(1, names);
     place_comp();
     suma = statkiGracza[0] + statkiGracza[1] +statkiGracza[2] + statkiGracza[3];
@@ -553,19 +610,15 @@ int pve(){
         // random computer shots (inteligenty)
         display_ingame(2);
         cout << "Computer make your shot" << endl;
-        cout << "Choose column: ";
-        random_shots(&z, &tries);
-        cout << "Choose Row: ";
-        cin >> x;   
-        check_ship(x, y, 1, shots[1], &hit[1]);
-        turn = 0;
+        random_shots(&hit[1], &hitComp);
+        if (hit[1] == 0) turn = 0;
         display_ingame(2);
         if (shots[1] == suma) {
             cout << "Congratulations! Computer won!" <<endl;
             game = false;
         }
-        Sleep(3000);
-        system("CLS");
+        //Sleep(3000);
+        //system("CLS");
     }
     while(game == true){
         if (turn == 0){
@@ -580,33 +633,27 @@ int pve(){
             cout << "Choose Row: ";
             cin >> x;
             
-            check_ship(x, y, 0, shots[0], &hit[0]);
+            shot_ship(x, y, 0, shots[0], &hit[0]);
+            if (hit[0] == 0) turn = 1;
             display_ingame(1);
             if (shots[0] == suma) {
                 cout << "Congratulations! Player "<< names[0] << " won!" <<endl;
                 game = false;
-            } 
-            turn = 1;
-            Sleep(3000);
-            system("CLS");
+            }
+            //Sleep(3000);
+            //system("CLS");
         }
         else if (turn == 1){
             display_ingame(2);
             cout << "Computer make your shot" << endl;
-            cout << "Choose column: ";
-
-            cout << "Choose Row: ";
-            cin >> x;
-            
-            check_ship(x, y, 1, shots[1], &hit[1]);
+            random_shots(&hit[1], &hitComp);
             display_ingame(2);
             if (shots[1] == suma) {
                 cout << "Congratulations! Computer won!" <<endl;
                 game = false;
             }
-            turn = 0;
-            Sleep(3000);
-            system("CLS");
+            //Sleep(3000);
+            //system("CLS");
         }
     }
     return 0;
@@ -621,10 +668,10 @@ int main() {
         cout << "Choose gamemode:" << endl;
         cout << "Player vs. Player  <- 1"<< endl << "Player vs. Computer  <- 2"<< endl;
         cin >> tryb;
-        system("CLS");
+        //system("CLS");
         if (tryb == 1) pvp();
         else pve();
-        system("CLS");
+        //system("CLS");
         cout << "Do you want to play again? (yes or no)" << endl;
         cin >> odp;
         if (odp == "no") game = false;
@@ -639,7 +686,7 @@ int main() {
                 }
             }
         }
-        system("CLS");
+        //system("CLS");
     }
     return 0;
 }
