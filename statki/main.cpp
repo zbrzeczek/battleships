@@ -6,7 +6,7 @@
 
 #include <iostream>
 #include <stdlib.h>
-#include <windows.h>
+//#include <windows.h>
 #include <time.h>
 using namespace std;
 
@@ -113,7 +113,7 @@ void chooseShipAmount(int statkiGracza[4]){
             cout << "Too much ships " << endl << "Try again!!" << endl;
             nrStatku++;
             suma = suma - sum;
-            Sleep(2000);
+            //Sleep(2000);
         }
         else statkiGracza[nrStatku-1] = ilosc;
         cout << endl;
@@ -220,8 +220,8 @@ void placeShips(int iloscGraczy, string names[2]){
                 cout << "You have no " << wyborDlugosci <<"-squared ships left!" << endl;
                 cout << "Try again" << endl;
                 y--;
-                Sleep(2000);
-                system("CLS");
+                //Sleep(2000);
+                //system("CLS");
             }
             else {
                 cout << "Choose square" << endl;
@@ -270,8 +270,8 @@ void placeShips(int iloscGraczy, string names[2]){
         }
         cout << "You placed all your ships!!" << endl;
         cout << "---------------------------" << endl << endl;
-        Sleep(3000);
-        system("CLS");
+        //Sleep(3000);
+        //system("CLS");
     }
 }
 
@@ -343,8 +343,8 @@ void placeCompShips() {
     }
         cout << "You placed all your ships!!" << endl;
         cout << "---------------------------" << endl << endl;
-        Sleep(3000);
-        system("CLS");
+        //Sleep(3000);
+        //system("CLS");
 }
 
 void playerShots(int x, int y, int gracz, int shotships, int *hit){
@@ -423,261 +423,7 @@ void compShots(int *hit, int *hitComp){
     int zmienna;
     int hitt = *hit;
     
-    if (*hitComp > 0) {
-        if (wayComp == ' '){
-            bool random = true;
-            while (random = true) {
-                zmienna = rand() % 4;
-                if (zmienna == 0) {
-                    //vertical
-                    if (sides[zmienna] == 0){
-                        playerShots(xMain, yMain-1, 1, shots[1], &hitt);
-                        if (hitt == 2) {
-                            *hitComp = 0;
-                            *hit = 1;
-                        }
-                        else if (hitt == 1){
-                            sidesMain = zmienna;
-                            wayComp = 'v';
-                            *hitComp++;
-                            *hit = 1;
-                        }
-                        else if (hitt == 0){
-                            sides[zmienna] = 1;
-                            *hit = 0;
-                        }
-                        random = false;
-                    }
-                }
-                else if (zmienna == 1){
-                    if (sides[zmienna] == 0){
-                        playerShots(xMain, yMain+1, 1, shots[1], &hitt);
-                        if (hitt == 2) {
-                            *hitComp = 0;
-                            *hit = 1;
-                        }
-                        else if (hitt == 1){
-                            sidesMain = zmienna;
-                            wayComp = 'v';
-                            *hitComp++;
-                            *hit = 1;
-                        }
-                        else if (hitt == 0){
-                            sides[zmienna] = 1;
-                            *hit = 0;
-                        }
-                        random = false;
-                    }
-                }
-                else if (zmienna == 2){
-                    //horizontal
-                    if (sides[zmienna] == 0){
-                        playerShots(xMain-1, yMain, 1, shots[1], &hitt);
-                        if (hitt == 2) {
-                            *hitComp = 0;
-                            *hit = 1;
-                        }
-                        else if (hitt == 1){
-                            sidesMain = zmienna;
-                            wayComp = 'h';
-                            *hitComp++;
-                            *hit = 1;
-                        }
-                        else if (hitt == 0){
-                            sides[zmienna] = 1;
-                            *hit = 0;
-                        }
-                        random = false;
-                    }
-                }
-                else {
-                    if (sides[zmienna] == 0){
-                        playerShots(xMain+1, yMain, 1, shots[1], &hitt);
-                        if (hitt == 2) {
-                            *hitComp = 0;
-                            *hit = 1;
-                        }
-                        else if (hitt == 1){
-                            sidesMain = zmienna;
-                            wayComp = 'h';
-                            *hitComp++;
-                            *hit = 1;
-                        }
-                        else if (hitt == 0){
-                            sides[zmienna] = 1;
-                            *hit = 0;
-                        }
-                        random = false;
-                    }
-                }
-            }
-        }
-        else if (wayComp = 'v'){
-            bool shoting = true;
-            int i =  1;
-            int sideOfshot = rand() % 2; 
-            if (sideOfshot == 0){
-                while (shoting == true) {
-                    if (tablica_shots[1][xMain-i][yMain] == ' '){
-                        playerShots(xMain, yMain-*hitComp, 1, shots[1], &hitt);
-                        if (hitt == 2) {
-                            *hitComp = 0;
-                            sidesMain = 0;
-                            *hit = 1;
-                        }
-                        else if (hitt == 1){
-                            *hitComp++;
-                            *hit = 1;
-                        }
-                        else {
-                            *hit = 0;
-                        }
-                        shoting = false;
-                    }
-                    else i++;
-                }
-            }
-            else {
-                while (shoting == true) {
-                    if (tablica_shots[1][xMain+i][yMain] == ' '){
-                        playerShots(xMain, yMain-*hitComp, 1, shots[1], &hitt);
-                        if (hitt == 2) {
-                            *hitComp = 0;
-                            sidesMain = 0;
-                            *hit = 1;
-                        }
-                        else if (hitt == 1){
-                            *hitComp++;
-                            *hit = 1;
-                        }
-                        else {
-                            *hit = 0;
-                        }
-                        shoting = false;
-                    }
-                    else i++;
-                }
-            }
-            //v
-            /*
-            if (side == 0){
-                if (tablica_shots[1][xMain][yMain-*hitComp] == ' ') {
-                    playerShots(xMain, yMain-*hitComp, 1, shots[1], &hitt);
-                    if (hitt == 2) {
-                        *hitComp = 0;
-                        sidesMain = 0;
-                        *hit = 1;
-                    }
-                    else if (hitt == 1){
-                        *hitComp++;
-                        *hit = 1;
-                    }
-                    else {
-                        *hit = 0;
-                        side = 1;
-                    }
-                }
-            }
-            else {
-                if (tablica_shots[1][xMain][yMain+idkname] == ' ') {
-                    playerShots(xMain, yMain+idkname, 1, shots[1], &hitt);
-                    if (hitt == 2) {
-                        *hitComp = 0;
-                        sidesMain = 0;
-                        side = 0;
-                        idkname = 1;
-                        *hit = 1;
-                    }
-                    else if (hitt == 1){
-                        *hitComp++;
-                        *hit = 1;
-                    }
-                    else if (hitt == 0) *hit = 0;
-                }
-            }
-            */
-        }
-        else if (wayComp = 'h'){
-            bool shoting = true;
-            int i =  1;
-            int sideOfshot = rand() % 2; 
-            if (sideOfshot == 0){
-                while (shoting == true) {
-                    if (tablica_shots[1][xMain-i][yMain] == ' '){
-                        playerShots(xMain, yMain-*hitComp, 1, shots[1], &hitt);
-                        if (hitt == 2) {
-                            *hitComp = 0;
-                            sidesMain = 0;
-                            *hit = 1;
-                        }
-                        else if (hitt == 1){
-                            *hitComp++;
-                            *hit = 1;
-                        }
-                        else {
-                            *hit = 0;
-                        }
-                        shoting = false;
-                    }
-                    else i++;
-                }
-            }
-            else {
-                while (shoting == true) {
-                    if (tablica_shots[1][xMain+i][yMain] == ' '){
-                        playerShots(xMain, yMain-*hitComp, 1, shots[1], &hitt);
-                        if (hitt == 2) {
-                            *hitComp = 0;
-                            sidesMain = 0;
-                            *hit = 1;
-                        }
-                        else if (hitt == 1){
-                            *hitComp++;
-                            *hit = 1;
-                        }
-                        else {
-                            *hit = 0;
-                        }
-                        shoting = false;
-                    }
-                    else i++;
-                }
-            }
-            //v
-            /*if (side == 0){
-                if (tablica_shots[1][xMain][yMain+*hitComp] == ' ') {
-                    playerShots(xMain, yMain+*hitComp, 1, shots[1], &hitt);
-                    if (hitt == 2) {
-                        *hitComp = 0;
-                        sidesMain = 0;
-                    }
-                    else if (hitt == 1){
-                        *hitComp++;
-                    }
-                    else {
-                        *hit = 0;
-                        side = 1;
-                    }
-                }
-            }
-            else {
-                if (tablica_shots[1][xMain][yMain-idkname] == ' ') {
-                    playerShots(xMain, yMain-idkname, 1, shots[1], &hitt);
-                    if (hitt == 2) {
-                        *hitComp = 0;
-                        sidesMain = 0;
-                        side = 0;
-                        idkname = 1;
-                    }
-                    else if (hitt == 1){
-                        *hitComp++;
-                    }
-                    else if (hitt == 0)*hit = 0;
-                }
-            }*/
-        }
-    }
-    else {
+    if (*hitComp == 0){
         cout << "Choose column: ";
         yMain = rand() % 10+1;
         zmiennay = yMain;
@@ -691,6 +437,194 @@ void compShots(int *hit, int *hitComp){
         }
         else if (hitt == 0) *hit = 0;
     }
+        
+    else if (*hitComp == 1) {
+        bool random = true;
+        while (random == true) {
+            zmienna = rand() % 4;
+            cout << zmienna;
+            if (zmienna == 0) {
+                //vertical
+                if (sides[zmienna] == 0){
+                    playerShots(xMain, yMain-1, 1, shots[1], &hitt);
+                    if (hitt == 2) {
+                        *hitComp = 0;
+                        *hit = 1;
+                    }
+                    else if (hitt == 1){
+                        sidesMain = zmienna;
+                        wayComp = 'v';
+                        *hitComp = 2;
+                        *hit = 1;
+                    }
+                    else if (hitt == 0){
+                        *hit = 0;
+                    }
+                    random = false;
+                    sides[zmienna] = 1;
+                }
+            }
+            else if (zmienna == 1){
+                if (sides[zmienna] == 0){
+                    playerShots(xMain, yMain+1, 1, shots[1], &hitt);
+                    if (hitt == 2) {
+                        *hitComp = 0;
+                        *hit = 1;
+                    }
+                    else if (hitt == 1){
+                        sidesMain = zmienna;
+                        wayComp = 'v';
+                        *hitComp = 2;
+                        *hit = 1;
+                    }
+                    else if (hitt == 0){
+                        *hit = 0;
+                    }
+                    random = false;
+                    sides[zmienna] = 1;
+                    
+                }
+            }
+            else if (zmienna == 2){
+                //horizontal
+                if (sides[zmienna] == 0){
+                    playerShots(xMain-1, yMain, 1, shots[1], &hitt);
+                    if (hitt == 2) {
+                        *hitComp = 0;
+                        *hit = 1;
+                    }
+                    else if (hitt == 1){
+                        sidesMain = zmienna;
+                        wayComp = 'h';
+                        *hitComp = 2;
+                        *hit = 1;
+                    }
+                    else if (hitt == 0){
+                        *hit = 0;
+                    }
+                    random = false;
+                    sides[zmienna] = 1;
+                }
+            }
+            else {
+                if (sides[zmienna] == 0){
+                    playerShots(xMain+1, yMain, 1, shots[1], &hitt);
+                    if (hitt == 2) {
+                        *hitComp = 0;
+                        *hit = 1;
+                    }
+                    else if (hitt == 1){
+                        sidesMain = zmienna;
+                        wayComp = 'h';
+                        *hitComp = 2;
+                        *hit = 1;
+                    }
+                    else if (hitt == 0){
+                        *hit = 0;
+                    }
+                    random = false;
+                    sides[zmienna] = 1;
+                }
+            }
+        }
+    }
+    else {
+        if (wayComp == 'v'){
+            bool shoting = true;
+            int i =  1;
+            int sideOfshot = rand() % 2;
+            if (sideOfshot == 0){
+                while (shoting == true) {
+                    if (tablica_shots[1][xMain][yMain-i] == ' '){
+                        playerShots(xMain, yMain-i, 1, shots[1], &hitt);
+                        cout << hitt << endl;
+                        if (hitt == 2) {
+                            *hitComp = 0;
+                            sidesMain = 0;
+                            *hit = 1;
+                        }
+                        else if (hitt == 1){
+                            *hit = 1;
+                        }
+                        else {
+                            *hit = 0;
+                        }
+                        shoting = false;
+                    }
+                    else i++;
+                }
+            }
+            else {
+                while (shoting == true) {
+                    if (tablica_shots[1][xMain][yMain+i] == ' '){
+                        playerShots(xMain, yMain+i, 1, shots[1], &hitt);
+                        if (hitt == 2) {
+                            *hitComp = 0;
+                            sidesMain = 0;
+                            *hit = 1;
+                        }
+                        else if (hitt == 1){
+                            *hit = 1;
+                        }
+                        else {
+                            *hit = 0;
+                        }
+                        shoting = false;
+                    }
+                    else i++;
+                }
+            }
+        }
+        else if (wayComp == 'h'){
+            bool shoting = true;
+            int i =  1;
+            int sideOfshot = rand() % 2;
+            if (sideOfshot == 0){
+                while (shoting == true) {
+                    if (tablica_shots[1][xMain-i][yMain] == ' '){
+                        playerShots(xMain-i, yMain, 1, shots[1], &hitt);
+                        if (hitt == 2) {
+                            *hitComp = 0;
+                            sidesMain = 0;
+                            *hit = 1;
+                        }
+                        else if (hitt == 1){
+                            *hit = 1;
+                        }
+                        else {
+                            *hit = 0;
+                        }
+                        shoting = false;
+                    }
+                    else i++;
+                }
+            }
+            else {
+                while (shoting == true) {
+                    if (tablica_shots[1][xMain+i][yMain] == ' '){
+                        playerShots(xMain+i, yMain, 1, shots[1], &hitt);
+                        if (hitt == 2) {
+                            *hitComp = 0;
+                            sidesMain = 0;
+                            *hit = 1;
+                        }
+                        else if (hitt == 1){
+                            *hit = 1;
+                        }
+                        else {
+                            *hit = 0;
+                        }
+                        shoting = false;
+                    }
+                    else i++;
+                }
+            }
+        }
+    }
+    // hit comp po 2 jest 2
+    cout << *hitComp << endl;
+    cout << yMain << endl;
+    cout << xMain << endl;
 }
 
 int pvp(){
@@ -727,8 +661,8 @@ int pvp(){
             cout << "Congratulations! Player "<< names[1] << " won!" <<endl;
             game = false;
         }
-        Sleep(3000);
-        system("CLS");
+        //Sleep(3000);
+        //system("CLS");
     }
     while(game == true){
         if (turn == 0){
@@ -750,8 +684,8 @@ int pvp(){
                 game = false;
             } 
             if (hit[0] == 0) turn = 1;
-            Sleep(3000);
-            system("CLS");
+            //Sleep(3000);
+            //system("CLS");
         }
         else if (turn == 1){
             displayShipsIngame(2);
@@ -771,8 +705,8 @@ int pvp(){
                 game = false;
             }
             if (hit[1] == 0) turn = 0;
-            Sleep(3000);
-            system("CLS");
+            //Sleep(3000);
+            //system("CLS");
         }
     
     /*
@@ -786,6 +720,7 @@ int pvp(){
 }
 
 int pve(){
+    srand (time(NULL));
     int y, x, suma;
     int hit[2] =  {0, 0};
     int hitComp = 0;
@@ -859,15 +794,28 @@ int pve(){
 
 int main() {
     srand(time(NULL));
-    int tryb;
+    string tryb;
+    int trybint;
+    bool choosing = true;
     bool game = true;
     string odp;
     while (game == true){
-        cout << "Choose gamemode:" << endl;
-        cout << "Player vs. Player  <- 1"<< endl << "Player vs. Computer  <- 2"<< endl;
-        cin >> tryb;
-        system("CLS");
-        if (tryb == 1) pvp();
+        while (choosing == true){
+            cout << "Choose gamemode:" << endl;
+            cout << "Player vs. Player <- PvP"<< endl << "Player vs. Computer  <- PvE"<< endl;
+            cin >> tryb;
+            if (tryb == "PvP" || tryb == "PvE" || tryb == "pvp" || tryb == "pve"){
+                if (tryb == "PvP" || tryb == "pvp") trybint = 1;
+                else trybint = 0;
+                choosing = false;
+            }
+            else {
+                cout << "Not allowed input, try again" << endl;
+                cout << "Allowed inputs: PvP, PvE, pvp, pve" << endl;
+            }
+        }
+        //system("CLS");
+        if (trybint == 1) pvp();
         else pve();
         system("CLS");
         cout << "Do you want to play again? (yes or no)" << endl;
