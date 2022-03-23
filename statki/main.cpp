@@ -33,7 +33,6 @@ char z = ' ';
 int xMain, yMain;
 int zmiennax, zmiennay;
 int sides[4] = {0, 0, 0, 0};
-int sidesMain = 0;
 char wayComp = ' ';
 int idkname=1;
  
@@ -431,7 +430,8 @@ void compShots(int *hit, int *hitComp){
         xMain = rand() % 10+1;
         zmiennax = xMain;
         playerShots(xMain, yMain, 1, shots[1], &hitt);
-        if (hitt == 1) {
+        if (hitt == 2) *hit = 2;
+        else if (hitt == 1) {
             *hitComp = 1;
             *hit = 1;
         }
@@ -449,10 +449,9 @@ void compShots(int *hit, int *hitComp){
                     playerShots(xMain, yMain-1, 1, shots[1], &hitt);
                     if (hitt == 2) {
                         *hitComp = 0;
-                        *hit = 1;
+                        *hit = 2;
                     }
                     else if (hitt == 1){
-                        sidesMain = zmienna;
                         wayComp = 'v';
                         *hitComp = 2;
                         *hit = 1;
@@ -469,10 +468,9 @@ void compShots(int *hit, int *hitComp){
                     playerShots(xMain, yMain+1, 1, shots[1], &hitt);
                     if (hitt == 2) {
                         *hitComp = 0;
-                        *hit = 1;
+                        *hit = 2;
                     }
                     else if (hitt == 1){
-                        sidesMain = zmienna;
                         wayComp = 'v';
                         *hitComp = 2;
                         *hit = 1;
@@ -491,10 +489,9 @@ void compShots(int *hit, int *hitComp){
                     playerShots(xMain-1, yMain, 1, shots[1], &hitt);
                     if (hitt == 2) {
                         *hitComp = 0;
-                        *hit = 1;
+                        *hit = 2;
                     }
                     else if (hitt == 1){
-                        sidesMain = zmienna;
                         wayComp = 'h';
                         *hitComp = 2;
                         *hit = 1;
@@ -511,10 +508,9 @@ void compShots(int *hit, int *hitComp){
                     playerShots(xMain+1, yMain, 1, shots[1], &hitt);
                     if (hitt == 2) {
                         *hitComp = 0;
-                        *hit = 1;
+                        *hit = 2;
                     }
                     else if (hitt == 1){
-                        sidesMain = zmienna;
                         wayComp = 'h';
                         *hitComp = 2;
                         *hit = 1;
@@ -540,8 +536,7 @@ void compShots(int *hit, int *hitComp){
                         cout << hitt << endl;
                         if (hitt == 2) {
                             *hitComp = 0;
-                            sidesMain = 0;
-                            *hit = 1;
+                            *hit = 2;
                         }
                         else if (hitt == 1){
                             *hit = 1;
@@ -560,8 +555,7 @@ void compShots(int *hit, int *hitComp){
                         playerShots(xMain, yMain+i, 1, shots[1], &hitt);
                         if (hitt == 2) {
                             *hitComp = 0;
-                            sidesMain = 0;
-                            *hit = 1;
+                            *hit = 2;
                         }
                         else if (hitt == 1){
                             *hit = 1;
@@ -585,8 +579,7 @@ void compShots(int *hit, int *hitComp){
                         playerShots(xMain-i, yMain, 1, shots[1], &hitt);
                         if (hitt == 2) {
                             *hitComp = 0;
-                            sidesMain = 0;
-                            *hit = 1;
+                            *hit = 2;
                         }
                         else if (hitt == 1){
                             *hit = 1;
@@ -605,8 +598,7 @@ void compShots(int *hit, int *hitComp){
                         playerShots(xMain+i, yMain, 1, shots[1], &hitt);
                         if (hitt == 2) {
                             *hitComp = 0;
-                            sidesMain = 0;
-                            *hit = 1;
+                            *hit = 2;
                         }
                         else if (hitt == 1){
                             *hit = 1;
@@ -817,7 +809,7 @@ int main() {
         //system("CLS");
         if (trybint == 1) pvp();
         else pve();
-        system("CLS");
+        //system("CLS");
         cout << "Do you want to play again? (yes or no)" << endl;
         cin >> odp;
         if (odp == "no") game = false;
@@ -832,7 +824,7 @@ int main() {
                 }
             }
         }
-        system("CLS");
+        //system("CLS");
     }
     return 0;
 }
