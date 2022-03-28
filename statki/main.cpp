@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <stdlib.h>
+#include<string>
 //#include <windows.h>
 #include <time.h>
 using namespace std;
@@ -30,10 +31,34 @@ int playerShips[4] = {0, 0, 0, 0};
 int shots[2] = {0, 0};
 char way[2] = {' ',' '};
 int xMain, yMain;
-int xVar, yVar;
 int sides[4] = {0, 0, 0, 0};
 char wayComp = ' ';
  
+//validation functions
+
+bool checkNumberIsInt(string input) {
+    for (int i = 0; i < input.length(); i++) {
+    if (isdigit(input[i]) == false) return false;
+    else return true;
+    }
+}
+
+bool valShipNum (string input) {
+    checkNumberIsInt(input);
+    if (checkNumber(input) == false) {
+        cout << input << "is not an integer"<<endl;
+        return false;
+    }
+    else {
+        if (input == "1" || input == "2" || input == "3" || input == "4") return true;
+        else {
+            cout << input << "is not an available input, try again"<<endl;
+            return false;
+        }
+    }
+}
+
+
 void changeShipAmount(int nrShip, int shipAmount, int playerShips[4], int* suma){
     int x = playerShips[nrShip-1];
     *suma = *suma - (x*2) - 2;
@@ -96,6 +121,7 @@ void chooseShipAmount(int playerShips[4]){
     int nrShip, shipAmount;
     bool again = true;
     int decision;
+    string nrShipString;
     int ilosc, suma = 0, sum;
     for (int ship = 4; ship > 0; ship--){
         cout << "-------------------------------" << endl;
@@ -132,8 +158,12 @@ void chooseShipAmount(int playerShips[4]){
         cout << endl;
         if (decision == 1) {
             system("CLS");
-            cout << "Which ships do you want to change?" << endl;
-            cin >> nrShip;
+            while (valShipNum(nrShipString) == false){
+                cout << "Which ships do you want to change?" << endl;
+                cin >> nrShip;
+                nrShipString = to_string(nrShip);
+                valShipNum(nrShipString);
+            }
             cout << "Type the amount of ship:" << endl;
             cin >> shipAmount;
             cout << endl;
@@ -422,11 +452,9 @@ void compShots(int *hit, int *hitComp){
     
     if (*hitComp == 0){
         cout << "Choose column: ";
-        yMain = rand() % 10+1;
-        yVar = yMain;
+        yMain = rand() % 10;
         cout << "Choose Row: ";
-        xMain = rand() % 10+1;
-        xVar = xMain;
+        xMain = rand() % 10;
         playerShots(xMain, yMain, 1, shots[1], &hitt);
         if (hitt == 2) *hit = 2;
         else if (hitt == 1) {
@@ -440,11 +468,12 @@ void compShots(int *hit, int *hitComp){
         bool random = true;
         while (random == true) {
             zmienna = rand() % 4;
-            cout << zmienna;
+            cout << "zmienna "<< zmienna;
             if (zmienna == 0) {
                 //vertical
                 if (sides[zmienna] == 0){
                     playerShots(xMain, yMain-1, 1, shots[1], &hitt);
+
                     if (hitt == 2) {
                         *hitComp = 0;
                         *hit = 2;
@@ -526,14 +555,14 @@ void compShots(int *hit, int *hitComp){
         if (wayComp == 'v'){
             bool shoting = true;
             int i =  1;
-            int sideOfshot = rand() % 2;
             while (shoting == true) {
+                int sideOfshot = rand() % 2;
                 if (sideOfshot == 0){
                     if (shotsTable[1][xMain][yMain-i] == ' '){
                         playerShots(xMain, yMain-i, 1, shots[1], &hitt);
                         cout << "where it shots; x"<< xMain << endl;
-                        cout <<"where it shots; x" << yMain - i << endl;
-                        cout << hitt << endl;
+                        cout <<"where it shots; y" << yMain - i << endl;
+                        cout << "hiit "<<hitt << endl;
                         if (hitt == 2) {
                             *hitComp = 0;
                             *hit = 2;
@@ -555,8 +584,9 @@ void compShots(int *hit, int *hitComp){
                 else {
                     if (shotsTable[1][xMain][yMain+i] == ' '){
                         playerShots(xMain, yMain+i, 1, shots[1], &hitt);
-                        cout << xMain << endl;
-                        cout << yMain + i << endl;
+                        cout << "where it shots; x"<< xMain << endl;
+                        cout <<"where it shots; y" << yMain + i << endl;
+                        cout << "hiit "<<hitt << endl;
                         if (hitt == 2) {
                             *hitComp = 0;
                             *hit = 2;
@@ -580,13 +610,14 @@ void compShots(int *hit, int *hitComp){
         else if (wayComp == 'h'){
             bool shoting = true;
             int i =  1;
-            int sideOfshot = rand() % 2;
             while (shoting == true){
+                int sideOfshot = rand() % 2;
                 if (sideOfshot == 0){
                     if (shotsTable[1][xMain-i][yMain] == ' '){
                         playerShots(xMain-i, yMain, 1, shots[1], &hitt);
-                        cout << xMain - i << endl;
-                        cout << yMain << endl;
+                        cout << "where it shots; x"<< xMain - i<< endl;
+                        cout <<"where it shots; y" << yMain << endl;
+                        cout << "hiit "<<hitt << endl;
                         if (hitt == 2) {
                             *hitComp = 0;
                             *hit = 2;
@@ -608,8 +639,9 @@ void compShots(int *hit, int *hitComp){
                 else {
                     if (shotsTable[1][xMain+i][yMain] == ' '){
                         playerShots(xMain+i, yMain, 1, shots[1], &hitt);
-                        cout << xMain + i << endl;
-                        cout << yMain << endl;
+                        cout << "where it shots; x"<< xMain + i << endl;
+                        cout <<"where it shots; y" << yMain<< endl;
+                        cout << "hiit "<<hitt << endl;
                         if (hitt == 2) {
                             *hitComp = 0;
                             *hit = 2;
@@ -632,9 +664,7 @@ void compShots(int *hit, int *hitComp){
         }
     }
     // hit comp po 2 jest 2
-    cout << *hitComp << endl;
-    cout << yMain << endl;
-    cout << xMain << endl;
+    cout << "hitcomp "<< *hitComp << endl;
 }
 
 int pvp(){
