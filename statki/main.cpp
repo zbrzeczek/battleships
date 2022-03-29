@@ -26,7 +26,8 @@ char shotsTable[2][10][10] = {
     {{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '},{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '},{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '},{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '},{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '},{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '},{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '},{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '},{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '},{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '}},
     {{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '},{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '},{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '},{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '},{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '},{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '},{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '},{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '},{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '},{' ',' ',' ', ' ', ' ',' ',' ',' ', ' ', ' '}}
 };
-char columns[10] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
+char columnUp[10] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
+char columnDown[10] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'};
 int playerShips[4] = {0, 0, 0, 0};
 int shots[2] = {0, 0};
 char way[2] = {' ',' '};
@@ -38,28 +39,46 @@ char wayComp = ' ';
 
 bool checkNumberIsInt(string input) {
     for (int i = 0; i < input.length(); i++) {
-    if (isdigit(input[i]) == false) return false;
-    else return true;
+        if (isdigit(input[i]) == false){
+            return false;
+        }
     }
+    return true;
 }
 
 bool valShipNum (string input) {
     checkNumberIsInt(input);
-    if (checkNumber(input) == false) {
-        cout << input << "is not an integer"<<endl;
+    if (checkNumberIsInt(input) == false) {
+        cout << input << " is not an integer"<<endl;
         return false;
     }
     else {
-        if (input == "1" || input == "2" || input == "3" || input == "4") return true;
+        if (input == "1" || input == "2" || input == "3" || input == "4"){
+            return true;
+        }
         else {
-            cout << input << "is not an available input, try again"<<endl;
+            cout << input << " is not an available input, try again"<<endl;
             return false;
         }
     }
 }
 
+int decision(string decision){
+    if (decision == "yes" || decision == "YES" || decision == "Yes"){
+        return 1;
+    }
+    else if (decision == "no" || decision == "NO" || decision == "No"){
+        return 0;
+    }
+    return 2;
+}
 
-void changeShipAmount(int nrShip, int shipAmount, int playerShips[4], int* suma){
+bool valColumn (string column) {
+    if ()
+}
+//program functions
+
+void changeShipAmount(int nrShip, int shipAmount, int playerShips[4], int* suma) {
     int x = playerShips[nrShip-1];
     *suma = *suma - (x*2) - 2;
     if (*suma + (shipAmount*2)+2 > 100){
@@ -120,7 +139,7 @@ bool checkSquaresAround(int length,int polex,int poley, char stronaOs, int playe
 void chooseShipAmount(int playerShips[4]){
     int nrShip, shipAmount;
     bool again = true;
-    int decision;
+    string odp;
     string nrShipString;
     int ilosc, suma = 0, sum;
     for (int ship = 4; ship > 0; ship--){
@@ -153,21 +172,26 @@ void chooseShipAmount(int playerShips[4]){
         }
         cout << "-------------------------" << endl << endl;
         cout << "After starting the game it's not possible to change the amount of ships!!" << endl <<endl;
-        cout << "Do you want to change your amount of ships? " << endl << "Yes  <- 1" << endl<< "No  <- 2" << endl;
-        cin >> decision;
+        cout << "Do you want to change your amount of ships? " << endl << "yes or no" << endl;
+        cin >> odp;
+        decision(odp);
+        while (decision(odp) == 2) {
+            cout << "invalid input, try again" << endl;
+            cout << "Do you want to change your amount of ships? " << endl << "yes or no" << endl;
+            cin >> odp;
+        }
         cout << endl;
-        if (decision == 1) {
-            system("CLS");
+        if (decision(odp) == 1) {
+            //system("CLS");
             while (valShipNum(nrShipString) == false){
                 cout << "Which ships do you want to change?" << endl;
-                cin >> nrShip;
-                nrShipString = to_string(nrShip);
-                valShipNum(nrShipString);
+                cin >> nrShipString;
             }
+            nrShip = stoi(nrShipString);
             cout << "Type the amount of ship:" << endl;
             cin >> shipAmount;
             cout << endl;
-            system("CLS");
+            //system("CLS");
             changeShipAmount(nrShip, shipAmount, playerShips, &suma);
         }
         else again = false;
@@ -220,6 +244,7 @@ void displayShipsIngame(int player){
 
 void placeShips(int numPlayers, string names[2]){
     int suma;
+    string lengthString;
     chooseShipAmount(playerShips);
     for(int player = 1; player<=numPlayers;player++){
         int zmiennaTablica[4] = {playerShips[0], playerShips[1], playerShips[2], playerShips[3]};
@@ -241,8 +266,11 @@ void placeShips(int numPlayers, string names[2]){
             cout << endl;
             cout << "If ship has more than 1 square, it'll be placed either vertically (downwards) or horizontally (to the right) from chosen square";
             cout << endl;
-            cout << "Which ship do you want to place?" << endl;
-            cin >> length;
+            while (valShipNum(lengthString) == false){
+                cout << "Which ships do you want to place?" << endl;
+                cin >> lengthString;
+            }
+            length = stoi(lengthString);
             if (zmiennaTablica[length-1] == 0) {
                 cout << "You have no " << length <<"-squared ships left!" << endl;
                 cout << "Try again" << endl;
@@ -256,7 +284,7 @@ void placeShips(int numPlayers, string names[2]){
                 cin >> poleyc;
                 //char to int convert
                 for (int column = 0; column<10; column++){
-                    if (columns[column] == poleyc) poley = column+1;
+                    if (columnUp[column] == poleyc) poley = column+1;
                 }
 
                 cout << "Row: ";
@@ -385,7 +413,7 @@ void playerShots(int x, int y, int player, int shotships, int *hit){
         shotsTable[player][x-1][y-1] = '#';
         tableShots++;
         zmiennaSize++;
-        //pamietaj ze od strzalu statek moze byc w 2 kierunki 
+        //pamietaj ze od strzalu statek moze byc w 2 kierunki
         if (shipsTable[zmienna][x-2][y-1] == 'X') way[player] = 'V';
         else if (shipsTable[zmienna][x][y-1] == 'X') way[player] = 'V';
         else if (shipsTable[zmienna][x-1][y-2] == 'X') way[player] = 'H';
@@ -446,7 +474,7 @@ void playerShots(int x, int y, int player, int shotships, int *hit){
     }
 }
 
-void compShots(int *hit, int *hitComp){
+void compShots(int *hit, int *hitComp) {
     int zmienna;
     int hitt = *hit;
     
@@ -693,7 +721,7 @@ int pvp(){
                 if (columns[column] == yc) y = column+1;
             }
         cout << "Choose Row: ";
-        cin >> x;   
+        cin >> x;
         playerShots(x, y, 1, shots[1], &hit[1]);
         if (hit[1] == 0) turn = 0;
         displayShipsIngame(2);
@@ -722,7 +750,7 @@ int pvp(){
             if (shots[0] == suma) {
                 cout << "Congratulations! Player "<< names[0] << " won!" <<endl;
                 game = false;
-            } 
+            }
             if (hit[0] == 0) turn = 1;
             //Sleep(3000);
             //system("CLS");
@@ -759,7 +787,7 @@ int pvp(){
     return 0;
 }
 
-int pve(){
+int pve() {
     int y, x, suma;
     int hit[2] =  {0, 0};
     int hitComp = 0;
@@ -859,8 +887,14 @@ int main() {
         //system("CLS");
         cout << "Do you want to play again? (yes or no)" << endl;
         cin >> odp;
-        if (odp == "no") game = false;
-        else {
+        decision(odp);
+        while (decision(odp) == 2) {
+            cout << "invalid input, try again" << endl;
+            cout << "Do you want to play again? (yes or no)" << endl;
+            cin >> odp;
+        }
+        if (decision(odp) == 0) game = false;
+        else if (decision(odp) == 1){
             for (int z = 0;z<2;z++){
                 for (int x = 0;x < 10;x++){
                     for (int y = 0;y<10;y++){
@@ -875,3 +909,4 @@ int main() {
     }
     return 0;
 }
+
